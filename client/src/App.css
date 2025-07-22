@@ -1,0 +1,81 @@
+.App {
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+  padding: 2rem;
+  background: #f9f9f9;
+}
+
+input {
+  width: 300px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+
+.result, .error {
+  margin-top: 2rem;
+  text-align: left;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+table {
+  width: 100%;
+  margin-top: 1rem;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+input {
+  width: 400px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+button {
+  margin-left: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+.result, .error {
+  margin-top: 30px;
+  text-align: left;
+}
+
+pre.sql-block {
+  background-color: #f4f4f4;
+  padding: 10px;
+  overflow-x: auto;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
