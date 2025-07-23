@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import {
-  LineChart, Line,
-  BarChart, Bar,
-  ScatterChart, Scatter,
-  XAxis, YAxis, CartesianGrid,
-  Tooltip, Legend, ResponsiveContainer
+  LineChart, Line, BarChart, Bar, ScatterChart, Scatter,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from "recharts";
 import "./App.css";
 
@@ -17,7 +14,6 @@ function App() {
 
   const handleAsk = async () => {
     if (!question.trim()) return;
-
     setLoading(true);
     setResult(null);
     setError(null);
@@ -49,7 +45,6 @@ function App() {
 
   const downloadCSV = () => {
     if (!result?.data?.length) return;
-
     const headers = Object.keys(result.data[0]).join(",");
     const rows = result.data.map((row) => Object.values(row).join(",")).join("\n");
     const csv = `${headers}\n${rows}`;
@@ -62,9 +57,8 @@ function App() {
   };
 
   const renderChart = () => {
-    const data = result.data;
+    const data = result?.data;
     if (!data || data.length === 0) return null;
-
     const keys = Object.keys(data[0]);
 
     if (keys.includes("date") && keys.length === 2) {
@@ -77,7 +71,7 @@ function App() {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey={metric} stroke="#8884d8" strokeWidth={2} />
+            <Line type="monotone" dataKey={metric} stroke="#00C9A7" strokeWidth={2} />
           </LineChart>
         </ResponsiveContainer>
       );
@@ -93,7 +87,7 @@ function App() {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey={metric} fill="#82ca9d" />
+            <Bar dataKey={metric} fill="#6366f1" />
           </BarChart>
         </ResponsiveContainer>
       );
@@ -108,7 +102,7 @@ function App() {
             <YAxis dataKey="clicks" name="Clicks" />
             <Tooltip cursor={{ strokeDasharray: "3 3" }} />
             <Legend />
-            <Scatter name="Data Points" data={data} fill="#ff7300" />
+            <Scatter name="Data Points" data={data} fill="#f59e0b" />
           </ScatterChart>
         </ResponsiveContainer>
       );
@@ -119,62 +113,77 @@ function App() {
 
   return (
     <div className="App">
-      <h1>🧠 Ask SQL with Gemini</h1>
-      <input
-        type="text"
-        placeholder="e.g., Top 5 products by clicks, Avg sales per day"
-        value={question}
-        onChange={(e) => setQuestion(e.target.value)}
-      />
-      <button onClick={handleAsk} disabled={loading}>
-        {loading ? "Thinking..." : "Ask"}
-      </button>
+      <header className="hero">
+        <h1>🧠 Data Whisperer</h1>
+        <p>Query your database with natural language — no SQL required.</p>
+      </header>
+
+      <section className="query-box">
+        <input
+          type="text"
+          placeholder="Ask anything... (e.g., Top 5 items by clicks)"
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+        />
+        <button onClick={handleAsk} disabled={loading}>
+          {loading ? "Thinking..." : "Run"}
+        </button>
+      </section>
+
+      <div className="suggestions">
+        <span>Examples:</span>
+        <ul>
+          <li>Ad spend by item</li>
+          <li>Which product had the highest CPC (Cost Per Click)?</li>
+          <li>What is my total sales?</li>
+          <li>Items with 0 impressions</li>
+        </ul>
+      </div>
 
       {result && (
-        <div className="result">
-          <h3>✅ Generated SQL</h3>
-          <pre className="sql-block">{result.sql}</pre>
-
-          <h3>📊 Query Result</h3>
+        <section className="output">
+          <h3>💡 SQL Generated</h3>
+          <pre className="code">{result.sql}</pre>
           <div className="meta">
-            <p>{result.data.length} rows returned in {duration}ms</p>
-            <button onClick={downloadCSV}>⬇️ Download CSV</button>
+            <span>{result.data.length} rows • {duration} ms</span>
+            <button onClick={downloadCSV}>📥 Download CSV</button>
           </div>
 
           {renderChart() && (
-            <div className="chart">
-              <h4>📈 Auto-Detected Visualization</h4>
+            <div className="chart-wrap">
+              <h4>📊 Chart</h4>
               {renderChart()}
             </div>
           )}
 
-          <table>
-            <thead>
-              <tr>
-                {Object.keys(result.data[0] || {}).map((key) => (
-                  <th key={key}>{key}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {result.data.map((row, i) => (
-                <tr key={i}>
-                  {Object.values(row).map((val, j) => (
-                    <td key={j}>{val}</td>
+          <div className="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  {Object.keys(result.data[0] || {}).map((key) => (
+                    <th key={key}>{key}</th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {result.data.map((row, i) => (
+                  <tr key={i}>
+                    {Object.values(row).map((val, j) => (
+                      <td key={j}>{val}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
       )}
 
       {error && (
-        <div className="error">
-          <h3>❌ {error.error}</h3>
+        <section className="error-box">
+          <h3>🚫 {error.error}</h3>
           <p>{error.detail}</p>
-          <p>🛠️ Try rephrasing your question or checking column/table names.</p>
-        </div>
+        </section>
       )}
     </div>
   );
